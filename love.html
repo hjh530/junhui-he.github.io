@@ -3,142 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>送给特别的你 🌹</title>
+    <title>只属于你的浪漫 ❤️</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: black; /* 换成黑色背景，让玫瑰和闪烁更显眼 */
+            background-color: #000; /* 黑色背景，让特效更亮眼 */
             height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-family: "Microsoft YaHei", sans-serif;
-            cursor: pointer; /* 提示可以点击 */
+            cursor: pointer; /* 变成手指图标，提示可点击 */
+            user-select: none; /* 防止双击选中文字 */
         }
 
-        /* 飘落的爱心 */
-        .heart-rain {
-            position: absolute;
-            top: -10vh;
+        /* 中间的提示文字 */
+        .center-text {
             color: #ff4d6d;
-            animation: fall linear forwards;
-            z-index: 1;
-            opacity: 0.8;
-        }
-
-        /* 中心的文字卡片 */
-        .text-container {
-            z-index: 10;
+            font-size: 2rem;
             text-align: center;
-            color: white;
-            animation: fadeIn 2s ease-in;
-            pointer-events: none; /* 让点击能穿透文字触发特效 */
-            text-shadow: 0 0 10px #ff0055;
+            animation: breathe 2s infinite ease-in-out;
+            pointer-events: none; /* 点击可以穿透文字 */
+            text-shadow: 0 0 15px #ff0055;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            color: #ffccd5;
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
         }
 
-        /* 巨大的闪烁玫瑰 */
-        .big-rose {
-            font-size: 100px;
-            animation: pulse 1.5s infinite;
-            filter: drop-shadow(0 0 20px red);
-            margin-bottom: 20px;
-        }
-
-        /* 点击产生的玫瑰 */
-        .click-rose {
+        /* 点击产生的爱心 */
+        .click-heart {
             position: absolute;
+            top: 0;
+            left: 0;
             font-size: 30px;
+            color: #ff0055;
             pointer-events: none;
-            animation: popUp 1s ease-out forwards;
+            animation: floatUpHeart 1s ease-out forwards;
+            z-index: 10;
+        }
+
+        /* 点击产生的文字 */
+        .click-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            pointer-events: none;
+            animation: floatUpText 1.5s ease-out forwards;
+            white-space: nowrap; /* 文字不换行 */
+            text-shadow: 0 0 5px #ff4d6d;
             z-index: 20;
         }
 
-        /* 动画定义 */
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 40px red); }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes popUp {
+        /* 动画：爱心向上飘并放大消失 */
+        @keyframes floatUpHeart {
             0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-            50% { transform: translate(-50%, -150%) scale(1.5); opacity: 1; }
             100% { transform: translate(-50%, -200%) scale(2); opacity: 0; }
+        }
+
+        /* 动画：文字向上飘并淡出 */
+        @keyframes floatUpText {
+            0% { transform: translate(-50%, -100%); opacity: 0; }
+            20% { transform: translate(-50%, -150%); opacity: 1; }
+            100% { transform: translate(-50%, -300%); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="text-container">
-        <div class="big-rose">🌹</div>
-        <h1>For My Girl</h1>
-        <p>点一下屏幕，送你一朵花</p>
+    <div class="center-text">
+        <h1>🌹 点这里 🌹</h1>
+        <p style="font-size: 1rem; color: #aaa;">(点击屏幕任意位置)</p>
     </div>
 
     <script>
-        // 1. 背景爱心雨
-        function createHeartRain() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-rain');
-            heart.innerHTML = '❤️'; 
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            const duration = Math.random() * 3 + 2;
-            heart.style.animationDuration = duration + 's';
-            
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), duration * 1000);
-        }
-        setInterval(createHeartRain, 200);
+        // 情话库：你可以自己在这个列表里增加更多
+        const words = [
+            "我爱你 ❤️", 
+            "I Love You", 
+            "永远爱你", 
+            "你最可爱", 
+            "Miss You", 
+            "🌹", 
+            "💖"
+        ];
 
-        // 2. 点击生成玫瑰花
+        // 监听点击事件
         document.addEventListener('click', function(e) {
-            const rose = document.createElement('div');
-            rose.classList.add('click-rose');
-            rose.innerHTML = '🌹'; // 或者是 '✨'
-            
-            // 设置位置为点击处
-            rose.style.left = e.clientX + 'px';
-            rose.style.top = e.clientY + 'px';
-            
-            // 随机大小和旋转
-            const size = Math.random() * 30 + 30;
-            rose.style.fontSize = size + 'px';
-            rose.style.transform = `rotate(${Math.random() * 360}deg)`;
+            const x = e.clientX;
+            const y = e.clientY;
 
-            document.body.appendChild(rose);
-            setTimeout(() => rose.remove(), 1000);
+            // 1. 生成爱心
+            const heart = document.createElement('div');
+            heart.classList.add('click-heart');
+            heart.innerHTML = '❤️'; 
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            // 随机大小
+            const size = Math.random() * 20 + 20; 
+            heart.style.fontSize = size + 'px';
+            document.body.appendChild(heart);
+
+            // 2. 生成情话文字
+            const text = document.createElement('div');
+            text.classList.add('click-text');
+            // 随机选一句
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            text.innerText = randomWord;
+            
+            // 文字稍微出现在爱心上方一点
+            text.style.left = x + 'px';
+            text.style.top = (y - 30) + 'px'; 
+            
+            // 随机文字颜色 (白色或淡粉色)
+            const colors = ['#fff', '#ffccd5', '#ffe6e6'];
+            text.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+            document.body.appendChild(text);
+
+            // 动画结束后清理元素，防止页面变卡
+            setTimeout(() => {
+                heart.remove();
+                text.remove();
+            }, 2000);
         });
-
-        // 自动触发几个点击效果，增加氛围
-        setInterval(() => {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            // 模拟点击效果略微麻烦，不如直接生成元素简单
-            // 这里为了简单，仅作为手动点击的彩蛋
-        }, 2000);
     </script>
 </body>
 </html>
+
